@@ -1,6 +1,6 @@
 import { Usuario } from './usuario.entity';
 import { UsuarioService } from './usuario.service';
-import { Body, Controller, Get, Post, Param } from "@nestjs/common"
+import { Body, Controller, Get, Post, Param, Res, HttpStatus } from "@nestjs/common"
 
 @Controller('users')
 export class UsuarioController {
@@ -15,9 +15,11 @@ export class UsuarioController {
   }
 
   @Post()
-   public cria(@Body() usuario:Usuario):Usuario{
+   public cria(@Body() usuario:Usuario, @Res() res){
       const usuarioCriado =  this.usuarioService.cria(usuario)
-      return usuarioCriado;
+      res.status(HttpStatus.CREATED)
+          .location(`/users/${usuarioCriado.nomeDeUsuairo}`)
+          .json(usuarioCriado); 
     }
 
 }
